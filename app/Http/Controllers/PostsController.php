@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Post;
+use DB;
 
 class PostsController extends Controller
 {
@@ -13,7 +15,16 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //
+        //if we want to select in order 
+       // $posts=Post::orderBy('title','desc')->take(1)->get();  //limiting the posts
+        //$posts = Post::all();
+        //return Post::where('title','Post Two')->get();
+        
+        //using db
+        //$posts=DB::select('SELECT * FROM posts');
+        //$posts=Post::orderBy('title','desc')->paginate(1); //pagination
+        $posts=Post::orderBy('created_at','desc')->get();
+        return view('posts/index')->with('posts',$posts);
     }
 
     /**
@@ -23,7 +34,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts/create');
     }
 
     /**
@@ -34,7 +45,20 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validation of form input
+        $this->validate($request,[                   //[]all the validation are written in those brackets
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        //create post and save data to db
+
+        $post=new Post;
+        $post->title=$request->input('title'); //this gets whatever is submitted to the form
+        $post->body=$request->input('body');
+        $post->save();
+        //redirecting after post
+        return redirect('/posts')->with('success','Post Created');
     }
 
     /**
@@ -44,8 +68,9 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {   
+        $post= Post::find($id);
+        return view('posts/show')->with('post',$post);
     }
 
     /**

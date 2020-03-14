@@ -1,0 +1,22 @@
+<!--checking and displaying errors in validation of form-->
+@if(count($errors)>0)
+@foreach($errors->all() as $error)
+    <div class="alert alert-danger">
+        {{$error}}
+    </div>
+@endforeach
+
+@endif
+
+<!--checking session errors-->
+@if(session('success'))
+    <div class="alert alert-success">
+        {{session('success')}}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-error">
+        {{session('error')}}
+    </div>
+@endif

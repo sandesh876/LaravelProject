@@ -10,4 +10,6 @@ class Post extends Model
     protected $table= 'posts';
     //primary key
     public $primarykey='id';
+    //time stamp
+    public $timestamps=true;
 }
